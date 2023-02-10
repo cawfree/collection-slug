@@ -1,21 +1,17 @@
 # `collection-slug`
 🧸 🤖 Determine the collection slug for a collection on [__OpenSea__](https://opensea.io).
 
-At the time of writing, the [__OpenSea API__](https://docs.opensea.io/reference/api-overview)...
+At the time of writing, the [__OpenSea API__](https://docs.opensea.io/reference/api-overview):
 - does not serve information about layer twos like [__Arbitrum__](https://arbitrum.io/) and [__Optimism__](https://www.optimism.io/)
 - will prevent you from querying for collection data when only knowing the `contractAddress` and not a corresponding `tokenId`
 - relies upon a centrally-planned api key distribution system which restricts access to intrepid explorers
-- shrewdly prevents you from querying GraphQL using [`opensea-submarine`](https://github.com/cawfree/opensea-submarine)
+- shrewdly prevents you from querying GraphQL using the now deprecated [`opensea-submarine`](https://github.com/cawfree/opensea-submarine)⚠️
 - will throttle you to oblivion if you exceed 4 req/s and your backoff period will increase quadratically as a penalty for repeat offenders
 - protected their webpages against scrapers by firewalling requests behind [__CloudFlare__](https://www.cloudflare.com/en-gb/) and DOM obfuscation
 
-And yet, everyone who works in NFTs all need `collection_slug`s, desperately, every one of us. We need `collection_slug`s like fish need water. What's a degen to do?
+And yet, everyone who works with [__NFTs__](https://ethereum.org/en/nft/) all need `collection_slug`s, desperately, every one of us. We need `collection_slug`s like fish need water. 🐟
 
-So I was researching how to bypass these limitations and encountered [__an article__](https://scrapeops.io/web-scraping-playbook/how-to-bypass-cloudflare/) that suggested we could work around such access restrictions by using archived copies of webpages...
-
-So here we are.
-
-OpenSea collection slugs, powered by the [__Wayback Machine__](https://web.archive.org/). They're surprisingly timely, even for newly trending collections. Let's go.
+I was researching how to bypass these limitations and encountered [__an article__](https://scrapeops.io/web-scraping-playbook/how-to-bypass-cloudflare/) that suggested we could work around such access restrictions by using archived copies of webpages... So here we are. OpenSea collection slugs, powered by the [__Wayback Machine__](https://web.archive.org/). They're surprisingly timely, even for newly trending collections. Let's go.
 
 ### getting started 🚀
 
