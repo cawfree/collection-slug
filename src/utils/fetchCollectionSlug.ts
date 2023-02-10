@@ -16,14 +16,13 @@ export const fetchCollectionSlug = async ({
 
   const z = await fetchSnapshotUrl(`opensea.io/assets/${network}/${contractAddress}/*`);
   const x = await text(z);
-
   const $ = parse(x);
 
   const slugs = $.getElementsByTagName('a')
     .map(e => e.attributes.href)
     .flatMap(e => e?.length ? [e] : [])
     .filter(e => e.includes(BASE_COLLECTION_URL))
-    .map(e => e.substring(e.indexOf(BASE_COLLECTION_URL) + BASE_COLLECTION_URL.length).split('/')[0])
+    .map(e => e.substring(e.indexOf(BASE_COLLECTION_URL) + BASE_COLLECTION_URL.length).split('/')[0]?.split('?')[0])
     .flatMap(e => typeof e === 'string' ? [e] : []);
 
   const slugPoints = slugs.reduce<Record<string, number>>(
