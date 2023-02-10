@@ -11,8 +11,10 @@
     "forceConsistentCasingInFileNames": true,
     "jsx": "react",
     "lib": ["esnext"],
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
+    "outDir": "dist",
+    "declaration": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "noImplicitUseStrict": false,
@@ -24,5 +26,6 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "esnext"
-  }
+  },
+  "exclude": ["scripts", "__tests__"]
 }
