@@ -1,6 +1,6 @@
 {
   "name": "collection-slug",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "🧸 🤖 Determine the collection slug for a collection on OpenSea.",
   "main": "dist",
   "repository": "https://github.com/cawfree/collection-slug",
