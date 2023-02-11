@@ -1,6 +1,6 @@
 import 'jest';
 
-import { fetchCollectionSlug, Network } from '../src';
+import {fetchCollectionSlug, fetchContractAddress, Network} from '../src';
 
 jest.setTimeout(60 * 1000);
 
@@ -80,6 +80,30 @@ describe('collection-slug', () => {
         contractAddress: '0x2953399124f0cbb46d2cbacd8a89cf0599974963'.toUpperCase(),
         network: Network.MATIC,
       })).rejects.toMatchSnapshot();
+    });
+  });
+
+  describe('fetchContractAddress', () => {
+    it('boredapeyachtclub', async () => {
+      expect(
+        await fetchContractAddress({
+          collectionSlug: 'boredapeyachtclub',
+        })
+      ).toBe('0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d');
+    });
+    it('rumble-kong-league', async () => {
+      expect(
+        await fetchContractAddress({
+          collectionSlug: 'rumble-kong-league',
+        }),
+      ).toBe('0xef0182dc0574cd5874494a120750fd222fdb909a');
+    });
+    it('renftlabs', async () => {
+      expect(
+        await fetchContractAddress({
+          collectionSlug: 'renftlabs',
+        }),
+      ).toBe('0x0db8c099b426677f575d512874d45a767e9acc3c');
     });
   });
 });

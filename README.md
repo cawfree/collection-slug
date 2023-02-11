@@ -41,6 +41,24 @@ void (async () => {
 })();
 ```
 
+You can also do the inverse:
+
+```typescript
+import { fetchContractAddress } from 'collection-slug';
+
+void (async () => {
+  try {
+    const contractAddress: string = await fetchContractAddress({
+      collectionSlug: 'renftlabs',
+    });
+    console.log(contractAddress); // '0x0db8c099b426677f575d512874d45a767e9acc3c'
+  } catch (e) {
+    console.error(e); // not indexed by the wayback machine
+    process.exitCode = 1;
+  }
+})();
+```
+
 From my [__experimentation__](scripts/rate-limit.ts), the Wayback Machine has a very generous rate limit policy. I managed to retain a sustained ~150 slugs-per-minute without error.
 
 ### license ✌️

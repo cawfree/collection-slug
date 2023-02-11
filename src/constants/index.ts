@@ -12,3 +12,5 @@ export const OPENSTORE_DEPLOYMENTS: readonly Deployment[] = [
     network: Network.MATIC,
   },
 ];
+
+export const DEFAULT_REDUNDANCY = 2;
