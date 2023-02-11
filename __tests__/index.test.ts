@@ -69,5 +69,18 @@ describe('collection-slug', () => {
         .toEqual('optimism-quests');
     });
   });
+
+  describe('openstore', () => {
+    it('failure', async () => {
+      await expect(fetchCollectionSlug({
+        contractAddress: '0x2953399124f0cbb46d2cbacd8a89cf0599974963',
+        network: Network.MATIC,
+      })).rejects.toMatchSnapshot();
+      await expect(fetchCollectionSlug({
+        contractAddress: '0x2953399124f0cbb46d2cbacd8a89cf0599974963'.toUpperCase(),
+        network: Network.MATIC,
+      })).rejects.toMatchSnapshot();
+    });
+  });
 });
 

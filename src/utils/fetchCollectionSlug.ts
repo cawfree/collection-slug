@@ -1,7 +1,7 @@
 import { parse } from 'node-html-parser';
 
 import { Network } from '../@types';
-import {BASE_COLLECTION_URL} from '../constants';
+import {BASE_COLLECTION_URL, OPENSTORE_DEPLOYMENTS} from '../constants';
 
 import { fetchSnapshotUrl } from './fetchSnapshotUrl';
 import { text } from './text';
@@ -15,6 +15,15 @@ export const fetchCollectionSlug = async ({
   readonly network?: Network;
   readonly redundancy?: number;
 }): Promise<string> => {
+
+  const isOpenstoreDeployment = OPENSTORE_DEPLOYMENTS
+    .find(
+    (e) =>
+      e.network === network && e.contractAddress.toLowerCase() === contractAddress.toLowerCase()
+  );
+
+  if (isOpenstoreDeployment)
+    throw new Error('OPENSTORE collections are not yet supported.');
 
   const z = await fetchSnapshotUrl({
     cdxUri: `opensea.io/assets/${

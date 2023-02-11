@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`collection-slug openstore failure 1`] = `[Error: OPENSTORE collections are not yet supported.]`;
+
+exports[`collection-slug openstore failure 2`] = `[Error: OPENSTORE collections are not yet supported.]`;

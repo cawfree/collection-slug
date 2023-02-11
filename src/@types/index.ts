@@ -5,3 +5,8 @@ export enum Network {
   AVALANCHE = 'avalanche',
   OPTIMISM = 'optimism',
 }
+
+export type Deployment = {
+  readonly contractAddress: string;
+  readonly network: Network;
+};
