@@ -1,6 +1,6 @@
 export * from './fetchCollectionSlug';
 export * from './fetchContractAddress';
-export * from './fetchSnapshotUrl';
+export * from './fetchSnapshotUrls';
 
 export * from './json';
 export * from './text';

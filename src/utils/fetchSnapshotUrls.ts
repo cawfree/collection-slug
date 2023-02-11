@@ -11,15 +11,19 @@ const cdx = ({
     cdxUri
   }&limit=${
     count
-  }&filter=mimetype:text/html&fl=original&output=json`;
+  }&filter=mimetype:text/html&fl=original&output=json&status=200`;
 
-export const fetchSnapshotUrl = async ({
+export const fetchSnapshotUrls = async ({
   redundancy,
   cdxUri,
 }: {
   readonly redundancy: number;
   readonly cdxUri: string;
-}) => {
+}): Promise<
+  readonly string[]
+> => {
+
+  // TODO: order by recent??
   const data = await json(cdx({cdxUri, count: redundancy}));
 
   if (!Array.isArray(data))
@@ -30,6 +34,8 @@ export const fetchSnapshotUrl = async ({
   if (!maybeArchiveUrls.length)
     throw new Error(`Unable to find an attempted archive url for "${cdxUri}".`);
 
+  const snapshotUrls: string [] = [];
+
   // Avoid rate limiting; make requests sequentially.
   for (const maybeArchiveUrl of maybeArchiveUrls) {
 
@@ -39,12 +45,16 @@ export const fetchSnapshotUrl = async ({
     if (!maybeAvailability || typeof maybeAvailability !== 'object')
       continue;
 
-    const maybeSnapshotUrl = maybeAvailability?.archived_snapshots?.closest?.url;
+    const available = maybeAvailability?.archived_snapshots?.closest?.available;
+
+    if (!available) continue;
+
+    const maybeSnapshotUrl = maybeAvailability?.archived_snapshots?.closest?.url  ;
 
     if (!maybeSnapshotUrl) continue;
 
-    return maybeSnapshotUrl;
+    snapshotUrls.push(maybeSnapshotUrl);
   }
 
-  throw new Error('Unable to determine closest snapshot url.');
+  return [...snapshotUrls];
 };

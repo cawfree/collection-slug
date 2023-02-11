@@ -7,7 +7,7 @@ import {
   OPENSTORE_DEPLOYMENTS,
 } from '../constants';
 
-import { fetchSnapshotUrl } from './fetchSnapshotUrl';
+import { fetchSnapshotUrls } from './fetchSnapshotUrls';
 import { text } from './text';
 import { winner } from './winner';
 
@@ -30,23 +30,30 @@ export const fetchCollectionSlug = async ({
   if (isOpenstoreDeployment)
     throw new Error('OPENSTORE collections are not yet supported.');
 
-  const z = await fetchSnapshotUrl({
+  const snapshotUrls = await fetchSnapshotUrls({
     cdxUri: `opensea.io/assets/${
       network
     }/${
       contractAddress
     }/*`,
-    redundancy,
+      redundancy,
   });
 
-  const $ = parse(await text(z));
+  for (const snapshotUrl of snapshotUrls) {
+    try {
+      const $ = parse(await text(snapshotUrl));
 
-  const slugs = $.getElementsByTagName('a')
-    .map(e => e.attributes.href)
-    .flatMap(e => e?.length ? [e] : [])
-    .filter(e => e.includes(BASE_COLLECTION_URL))
-    .map(e => e.substring(e.indexOf(BASE_COLLECTION_URL) + BASE_COLLECTION_URL.length).split('/')[0]?.split('?')[0])
-    .flatMap(e => typeof e === 'string' ? [e] : []);
+      const slugs = $.getElementsByTagName('a')
+        .map(e => e.attributes.href)
+        .flatMap(e => e?.length ? [e] : [])
+        .filter(e => e.includes(BASE_COLLECTION_URL))
+        .map(e => e.substring(e.indexOf(BASE_COLLECTION_URL) + BASE_COLLECTION_URL.length).split('/')[0]?.split('?')[0])
+        .flatMap(e => typeof e === 'string' ? [e] : []);
 
-  return winner(slugs);
+      return winner(slugs);
+    } catch {}
+  }
+
+  throw new Error('Unable to determine closest snapshot url.');
+
 };

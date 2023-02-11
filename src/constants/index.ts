@@ -13,4 +13,4 @@ export const OPENSTORE_DEPLOYMENTS: readonly Deployment[] = [
   },
 ];
 
-export const DEFAULT_REDUNDANCY = 2;
+export const DEFAULT_REDUNDANCY = 3;

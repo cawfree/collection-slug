@@ -1,6 +1,6 @@
 import { DEFAULT_REDUNDANCY } from '../constants';
 
-import { fetchSnapshotUrl } from './fetchSnapshotUrl';
+import { fetchSnapshotUrls } from './fetchSnapshotUrls';
 import { text } from './text';
 import { winner } from './winner';
 
@@ -11,14 +11,18 @@ export async function fetchContractAddress({
   readonly collectionSlug: string;
   readonly redundancy?: number;
 }) {
-  const z = await fetchSnapshotUrl({
+  const snapshotUrls = await fetchSnapshotUrls({
     cdxUri: `opensea.io/collection/${collectionSlug}`,
     redundancy,
   });
 
-  const html = await text(z);
+  for (const snapshotUrl of snapshotUrls) {
+    try {
+      const html = await text(snapshotUrl);
+      const addresses = html.match(/(\b0x[a-f0-9]{40}\b)/g) || [];
+      return winner(addresses);
+    } catch {}
+  }
 
-  const addresses = html.match(/(\b0x[a-f0-9]{40}\b)/g) || [];
-
-  return winner(addresses);
+  throw new Error('Unable to determine closest snapshot url.')
 }
