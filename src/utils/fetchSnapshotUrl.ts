@@ -1,32 +1,50 @@
 import { json } from './json';
 
-const cdx = (roughUrl: string) =>
-  `http://web.archive.org/cdx/search/cdx?url=${roughUrl}&limit=1&filter=mimetype:text/html&fl=original&output=json`;
+const cdx = ({
+  cdxUri,
+  count,
+}: {
+  readonly cdxUri: string;
+  readonly count: number;
+}) =>
+  `http://web.archive.org/cdx/search/cdx?url=${
+    cdxUri
+  }&limit=${
+    count
+  }&filter=mimetype:text/html&fl=original&output=json`;
 
-export const fetchSnapshotUrl = async (roughUrl: string) => {
-  const data = await json(cdx(roughUrl));
+export const fetchSnapshotUrl = async ({
+  redundancy,
+  cdxUri,
+}: {
+  readonly redundancy: number;
+  readonly cdxUri: string;
+}) => {
+  const data = await json(cdx({cdxUri, count: redundancy}));
 
   if (!Array.isArray(data))
     throw new Error(`Expected data array, encountered "${String(data)}".`);
 
-  const maybeArchiveUrl = data?.[1]?.[0];
+  const [_, ...maybeArchiveUrls] = [...new Set(data.flatMap(e => e))];
 
-  if (typeof maybeArchiveUrl !== 'string' || !maybeArchiveUrl.length)
-    throw new Error(`Unable to find an attempted archive url for "${
-      roughUrl
-    }".`);
+  if (!maybeArchiveUrls.length)
+    throw new Error(`Unable to find an attempted archive url for "${cdxUri}".`);
 
-  const availability = await json(`https://archive.org/wayback/available?url=${maybeArchiveUrl}`);
+  // Avoid rate limiting; make requests sequentially.
+  for (const maybeArchiveUrl of maybeArchiveUrls) {
 
-  if (typeof availability !== 'object' || !availability)
-    throw new Error(`Unable to determine availability for archiveUrl "${maybeArchiveUrl}".`);
+    const maybeAvailability =
+      await json(`https://archive.org/wayback/available?url=${maybeArchiveUrl}`);
 
-  const maybeClosestSnapshotUrl = availability?.archived_snapshots?.closest?.url;
+    if (!maybeAvailability || typeof maybeAvailability !== 'object')
+      continue;
 
-  if (typeof maybeClosestSnapshotUrl !== 'string' || !maybeClosestSnapshotUrl.length)
-    throw new Error(`Unable to determine closest snapshot url in: ${
-      JSON.stringify(availability)
-    }`);
+    const maybeSnapshotUrl = maybeAvailability?.archived_snapshots?.closest?.url;
 
-  return maybeClosestSnapshotUrl;
+    if (!maybeSnapshotUrl) continue;
+
+    return maybeSnapshotUrl;
+  }
+
+  throw new Error('Unable to determine closest snapshot url.');
 };

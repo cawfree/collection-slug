@@ -1,7 +1,7 @@
 import { parse } from 'node-html-parser';
 
 import { Network } from '../@types';
-import { BASE_COLLECTION_URL } from '../constants';
+import {BASE_COLLECTION_URL} from '../constants';
 
 import { fetchSnapshotUrl } from './fetchSnapshotUrl';
 import { text } from './text';
@@ -9,14 +9,23 @@ import { text } from './text';
 export const fetchCollectionSlug = async ({
   contractAddress,
   network = Network.ETHEREUM,
+  redundancy = 3,
 }: {
   readonly contractAddress: string;
   readonly network?: Network;
+  readonly redundancy?: number;
 }): Promise<string> => {
 
-  const z = await fetchSnapshotUrl(`opensea.io/assets/${network}/${contractAddress}/*`);
-  const x = await text(z);
-  const $ = parse(x);
+  const z = await fetchSnapshotUrl({
+    cdxUri: `opensea.io/assets/${
+      network
+    }/${
+      contractAddress
+    }/*`,
+    redundancy,
+  });
+
+  const $ = parse(await text(z));
 
   const slugs = $.getElementsByTagName('a')
     .map(e => e.attributes.href)

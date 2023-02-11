@@ -12,7 +12,9 @@ const requestsPerMinute = (() => {
 })();
 
 const requestRookies = async () => {
-  await fetchCollectionSlug({contractAddress: '0x63f421b24cea6765b326753f6d4e558c21ea8f76'});
+  await fetchCollectionSlug({
+    contractAddress: '0x63f421b24cea6765b326753f6d4e558c21ea8f76',
+  });
   return requestsPerMinute();
 };
 
