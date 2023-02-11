@@ -41,7 +41,7 @@ void (async () => {
 })();
 ```
 
-From my [__experimentation__](scripts/rate-limit.ts), it looks like these queries we're making aren't subject to throttling by the Wayback Machine. I managed to test a sustained ~150 slugs-per-minute before I started feeling like an asshole abusing this wonderful shared resource.
+From my [__experimentation__](scripts/rate-limit.ts), the Wayback Machine has a very generous rate limit policy. I managed to retain a sustained ~150 slugs-per-minute without error.
 
 ### license ✌️
 [__CC0-1.0__](./LICENSE)
