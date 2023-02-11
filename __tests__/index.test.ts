@@ -71,15 +71,37 @@ describe('collection-slug', () => {
   });
 
   describe('openstore', () => {
-    it('failure', async () => {
-      await expect(fetchCollectionSlug({
-        contractAddress: '0x2953399124f0cbb46d2cbacd8a89cf0599974963',
-        network: Network.MATIC,
-      })).rejects.toMatchSnapshot();
-      await expect(fetchCollectionSlug({
-        contractAddress: '0x2953399124f0cbb46d2cbacd8a89cf0599974963'.toUpperCase(),
-        network: Network.MATIC,
-      })).rejects.toMatchSnapshot();
+
+    it('missing-token-id', async () => {
+      await expect(
+        fetchCollectionSlug({
+          contractAddress: '0x2953399124f0cbb46d2cbacd8a89cf0599974963',
+          network: Network.MATIC,
+        })
+      ).rejects.toMatchSnapshot();
+    });
+
+    describe('matic', () => {
+
+      it('artisantspecial', async () => {
+        await expect(
+          fetchCollectionSlug({
+            contractAddress: '0x2953399124f0cbb46d2cbacd8a89cf0599974963',
+            network: Network.MATIC,
+            tokenId: '113248483929477389204957219413891167927065839510717550429608723920230394365404',
+          }),
+        ).resolves.toBe('artisantspecial');
+      });
+
+      it('wandievents', async () => {
+        await expect(
+          fetchCollectionSlug({
+            contractAddress: '0x2953399124f0cbb46d2cbacd8a89cf0599974963',
+            network: Network.MATIC,
+            tokenId: '94149156980946697317614428571944365609665181621202038530767030033582598931348',
+            }),
+        ).resolves.toBe('wandievents');
+      });
     });
   });
 

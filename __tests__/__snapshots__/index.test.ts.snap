@@ -1,5 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`collection-slug openstore failure 1`] = `[Error: OPENSTORE collections are not yet supported.]`;
-
-exports[`collection-slug openstore failure 2`] = `[Error: OPENSTORE collections are not yet supported.]`;
+exports[`collection-slug openstore missing-token-id 1`] = `[Error: To find the collectionSlug on the OPENSTORE contract, you must specify a tokenId.]`;

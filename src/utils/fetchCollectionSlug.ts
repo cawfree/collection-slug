@@ -14,9 +14,11 @@ import { winner } from './winner';
 export const fetchCollectionSlug = async ({
   contractAddress,
   network = Network.ETHEREUM,
+  tokenId = undefined,
   redundancy = DEFAULT_REDUNDANCY,
 }: {
   readonly contractAddress: string;
+  readonly tokenId?: string;
   readonly network?: Network;
   readonly redundancy?: number;
 }): Promise<string> => {
@@ -27,15 +29,17 @@ export const fetchCollectionSlug = async ({
       e.network === network && e.contractAddress.toLowerCase() === contractAddress.toLowerCase()
   );
 
-  if (isOpenstoreDeployment)
-    throw new Error('OPENSTORE collections are not yet supported.');
+  if (isOpenstoreDeployment && (!tokenId || !tokenId.length))
+    throw new Error('To find the collectionSlug on the OPENSTORE contract, you must specify a tokenId.');
 
   const snapshotUrls = await fetchSnapshotUrls({
     cdxUri: `opensea.io/assets/${
       network
     }/${
       contractAddress
-    }/*`,
+    }/${
+      isOpenstoreDeployment ? String(tokenId) : '*'
+    }`,
       redundancy,
   });
 
