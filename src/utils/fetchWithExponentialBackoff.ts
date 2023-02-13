@@ -33,7 +33,8 @@ const fetchWithExponentialBackoffThunk = (() => {
 
   const dispatch = (nextState: State): State => Object.assign(state, nextState);
 
-  const maybeIncreaseBackoff = () => dispatch(stateWithBackoff(state, initialBackoffTime, backoffMultiplier));
+  const maybeIncreaseBackoff = () =>
+    dispatch(stateWithBackoff(state, initialBackoffTime, backoffMultiplier));
 
   const maybeResetBackoff = () => {
     const {initializedAt, delay} = state;
@@ -49,7 +50,6 @@ const fetchWithExponentialBackoffThunk = (() => {
     const startedAt = Date.now();
 
     try {
-
       for (
         let now = startedAt, dt = now - startedAt;
         dt < state.delay;
