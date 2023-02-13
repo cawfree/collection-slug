@@ -6,9 +6,9 @@ import {
 
 import { fetchArchiveUrls } from './fetchArchiveUrls';
 import { fetchMaybeAvailableSnapshotUrl } from './fetchMaybeAvailableSnapshotUrl';
+import { isOpenStoreDeployment } from './isOpenStoreDeployment';
 import { text } from './text';
 import { winner } from './winner';
-import {isOpenStoreDeployment} from "./isOpenStoreDeployment";
 
 export const fetchCollectionSlug = async ({
   contractAddress,
