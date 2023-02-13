@@ -1,8 +1,9 @@
 import {DEFAULT_REDUNDANCY} from '../constants';
 
-import { fetchSnapshotUrls } from './fetchSnapshotUrls';
+import { fetchArchiveUrls } from './fetchArchiveUrls';
 import { text } from './text';
 import { winner } from './winner';
+import {fetchMaybeAvailableSnapshotUrl} from "./fetchMaybeAvailableSnapshotUrl";
 
 export async function fetchContractAddress({
   collectionSlug,
@@ -11,15 +12,21 @@ export async function fetchContractAddress({
   readonly collectionSlug: string;
   readonly redundancy?: number;
 }) {
-  const snapshotUrls = await fetchSnapshotUrls({
+  const archiveUrls = await fetchArchiveUrls({
     cdxUri: `opensea.io/collection/${collectionSlug}`,
     redundancy,
   });
 
-  for (const snapshotUrl of snapshotUrls) {
+  for (const archiveUrl of archiveUrls) {
     try {
-      const html = await text(snapshotUrl);
+
+      const maybeSnapshotUrl = await fetchMaybeAvailableSnapshotUrl(archiveUrl);
+
+      if (!maybeSnapshotUrl) continue;
+
+      const html = await text(maybeSnapshotUrl);
       const addresses = html.match(/(\b0x[a-f0-9]{40}\b)/g) || [];
+
       return winner(addresses);
     } catch {}
   }

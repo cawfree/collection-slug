@@ -13,7 +13,7 @@ const cdx = ({
     count
   }&filter=mimetype:text/html&fl=original&output=json&status=200`;
 
-export const fetchSnapshotUrls = async ({
+export const fetchArchiveUrls = async ({
   redundancy,
   cdxUri,
 }: {
@@ -32,26 +32,5 @@ export const fetchSnapshotUrls = async ({
   if (!maybeArchiveUrls.length)
     throw new Error(`Unable to find an attempted archive url for "${cdxUri}".`);
 
-  const snapshotUrls: string [] = [];
-
-  // Avoid rate limiting; make requests sequentially.
-  for (const maybeArchiveUrl of maybeArchiveUrls) {
-
-    const maybeAvailability = await json(`https://archive.org/wayback/available?url=${maybeArchiveUrl}`);
-
-    if (!maybeAvailability || typeof maybeAvailability !== 'object')
-      continue;
-
-    const available = maybeAvailability?.archived_snapshots?.closest?.available;
-
-    if (!available) continue;
-
-    const maybeSnapshotUrl = maybeAvailability?.archived_snapshots?.closest?.url  ;
-
-    if (!maybeSnapshotUrl) continue;
-
-    snapshotUrls.push(maybeSnapshotUrl);
-  }
-
-  return [...snapshotUrls];
+  return maybeArchiveUrls;
 };

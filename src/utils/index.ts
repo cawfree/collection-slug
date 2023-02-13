@@ -1,7 +1,8 @@
+export * from './fetchArchiveUrls';
 export * from './fetchCollectionSlug';
 export * from './fetchWithExponentialBackoff';
+export * from './fetchMaybeAvailableSnapshotUrl';
 export * from './fetchContractAddress';
-export * from './fetchSnapshotUrls';
 
 export * from './json';
 export * from './text';

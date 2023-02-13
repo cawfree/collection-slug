@@ -7,9 +7,10 @@ import {
   OPENSTORE_DEPLOYMENTS,
 } from '../constants';
 
-import { fetchSnapshotUrls } from './fetchSnapshotUrls';
+import { fetchArchiveUrls } from './fetchArchiveUrls';
 import { text } from './text';
 import { winner } from './winner';
+import {fetchMaybeAvailableSnapshotUrl} from "./fetchMaybeAvailableSnapshotUrl";
 
 export const fetchCollectionSlug = async ({
   contractAddress,
@@ -32,7 +33,7 @@ export const fetchCollectionSlug = async ({
   if (isOpenstoreDeployment && (!tokenId || !tokenId.length))
     throw new Error('To find the collectionSlug on the OPENSTORE contract, you must specify a tokenId.');
 
-  const snapshotUrls = await fetchSnapshotUrls({
+  const archiveUrls = await fetchArchiveUrls({
     cdxUri: `opensea.io/assets/${
       network
     }/${
@@ -40,12 +41,16 @@ export const fetchCollectionSlug = async ({
     }/${
       isOpenstoreDeployment ? String(tokenId) : '*'
     }`,
-      redundancy,
+    redundancy,
   });
 
-  for (const snapshotUrl of snapshotUrls) {
+  for (const archiveUrl of archiveUrls) {
     try {
-      const $ = parse(await text(snapshotUrl));
+      const maybeSnapshotUrl = await fetchMaybeAvailableSnapshotUrl(archiveUrl);
+
+      if (!maybeSnapshotUrl) continue;
+
+      const $ = parse(await text(maybeSnapshotUrl));
 
       const slugs = $.getElementsByTagName('a')
         .map(e => e.attributes.href)

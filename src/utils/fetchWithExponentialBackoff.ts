@@ -53,7 +53,6 @@ const fetchWithExponentialBackoffThunk = (({
 
   return async function fetchWithExponentialBackoff(url: string): Promise<Response> {
     const startedAt = Date.now();
-
     try {
       for (
         let now = startedAt, dt = now - startedAt;
