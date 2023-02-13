@@ -2,13 +2,13 @@ import { Network } from '../@types';
 import {
   BASE_COLLECTION_URL,
   DEFAULT_REDUNDANCY,
-  OPENSTORE_DEPLOYMENTS,
 } from '../constants';
 
 import { fetchArchiveUrls } from './fetchArchiveUrls';
 import { fetchMaybeAvailableSnapshotUrl } from './fetchMaybeAvailableSnapshotUrl';
 import { text } from './text';
 import { winner } from './winner';
+import {isOpenStoreDeployment} from "./isOpenStoreDeployment";
 
 export const fetchCollectionSlug = async ({
   contractAddress,
@@ -22,13 +22,9 @@ export const fetchCollectionSlug = async ({
   readonly redundancy?: number;
 }): Promise<string> => {
 
-  const isOpenstoreDeployment = OPENSTORE_DEPLOYMENTS
-    .find(
-    (e) =>
-      e.network === network && e.contractAddress.toLowerCase() === contractAddress.toLowerCase()
-  );
+  const isOpenStore = isOpenStoreDeployment(contractAddress, network);
 
-  if (isOpenstoreDeployment && (!tokenId || !tokenId.length))
+  if (isOpenStore && (!tokenId || !tokenId.length))
     throw new Error('To find the collectionSlug on the OPENSTORE contract, you must specify a tokenId.');
 
   const archiveUrls = await fetchArchiveUrls({
@@ -37,7 +33,7 @@ export const fetchCollectionSlug = async ({
     }/${
       contractAddress
     }/${
-      isOpenstoreDeployment ? String(tokenId) : '*'
+      isOpenStore ? String(tokenId) : '*'
     }`,
     redundancy,
   });
