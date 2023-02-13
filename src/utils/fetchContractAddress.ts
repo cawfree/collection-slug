@@ -1,9 +1,9 @@
 import {DEFAULT_REDUNDANCY} from '../constants';
 
 import { fetchArchiveUrls } from './fetchArchiveUrls';
+import { fetchMaybeAvailableSnapshotUrl } from './fetchMaybeAvailableSnapshotUrl';
 import { text } from './text';
 import { winner } from './winner';
-import {fetchMaybeAvailableSnapshotUrl} from "./fetchMaybeAvailableSnapshotUrl";
 
 export async function fetchContractAddress({
   collectionSlug,
