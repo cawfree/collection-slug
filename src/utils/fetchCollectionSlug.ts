@@ -5,6 +5,7 @@ import {
   BASE_COLLECTION_URL,
   DEFAULT_REDUNDANCY,
   OPENSTORE_DEPLOYMENTS,
+  WAYBACK_MACHINE_BOTTLENECK,
 } from '../constants';
 
 import { fetchSnapshotUrls } from './fetchSnapshotUrls';
@@ -45,7 +46,7 @@ export const fetchCollectionSlug = async ({
 
   for (const snapshotUrl of snapshotUrls) {
     try {
-      const $ = parse(await text(snapshotUrl));
+      const $ = parse(await WAYBACK_MACHINE_BOTTLENECK.schedule(() => text(snapshotUrl)));
 
       const slugs = $.getElementsByTagName('a')
         .map(e => e.attributes.href)

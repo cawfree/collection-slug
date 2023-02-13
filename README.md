@@ -18,7 +18,7 @@ I was researching how to bypass these limitations and encountered [__an article_
 You can install using [__Yarn__](https://yarnpkg.com):
 
 ```shell
-yarn add node-html-parser collection-slug
+yarn add node-html-parser bottleneck collection-slug
 ```
 
 Depending on your runtime, you'll need to ensure some kind of variation of [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is globally available. This is polyfilled onto the `window` object by default on browsers and [__React Native__](https://reactnative.dev), whereas on [__Node.js__](https://nodejs.org/en/) you'll need to install [`node-fetch`](https://www.npmjs.com/package/node-fetch).

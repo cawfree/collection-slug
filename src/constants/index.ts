@@ -1,3 +1,5 @@
+import Bottleneck from 'bottleneck';
+
 import {Deployment, Network} from '../@types';
 
 export const BASE_COLLECTION_URL = 'https://opensea.io/collection/';
@@ -13,4 +15,8 @@ export const OPENSTORE_DEPLOYMENTS: readonly Deployment[] = [
   },
 ];
 
-export const DEFAULT_REDUNDANCY = 3;
+export const DEFAULT_REDUNDANCY = 1;
+
+export const WAYBACK_MACHINE_BOTTLENECK = new Bottleneck({
+  maxConcurrent: 8,
+});
