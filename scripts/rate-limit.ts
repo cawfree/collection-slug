@@ -1,4 +1,4 @@
-import {fetchCollectionSlug} from '../src';
+import {fetchCollectionSlug, BOTTLENECK_MAX_CONCURRENT} from '../src';
 
 const requestsPerMinute = (() => {
   let dt: Date[] = [];
@@ -16,7 +16,12 @@ const requestSomethingWhichDoesNotExist = async () => {
     await fetchCollectionSlug({
       contractAddress: '0x00000000006c3852cbef3e08e8df289169ede582',
     });
-  } catch {}
+  } catch (e) {
+    const isAcceptableError = e instanceof Error
+      && e.message === 'Unable to find an attempted archive url for "opensea.io/assets/ethereum/0x00000000006c3852cbef3e08e8df289169ede582/*".';
+
+    if (!isAcceptableError) throw e;
+  }
   return requestsPerMinute();
 };
 
@@ -30,21 +35,22 @@ const requestRookies = async () => {
 void (async () => {
   while (true) {
     try {
-      const [,,,,,,, rpm] = await Promise.all([
-        requestRookies(),
-        requestSomethingWhichDoesNotExist(),
-        requestRookies(),
-        requestSomethingWhichDoesNotExist(),
-        requestRookies(),
-        requestSomethingWhichDoesNotExist(),
-        requestRookies(),
-        requestRookies(),
-      ]);
+      const parallelRequests = BOTTLENECK_MAX_CONCURRENT;
 
-      console.log(rpm); // sustained ~110rpm
+      const results = await Promise.all(
+        [
+          ...[...Array(parallelRequests)].map(requestRookies),
+          ...[...Array(parallelRequests)].map(requestSomethingWhichDoesNotExist),
+        ],
+      );
+
+      const rpm = results[results.length - 1];
+
+      console.log('rpm', rpm); // sustained ~110rpm
     } catch (e) {
       console.error(e);
-      process.exitCode = 1;
+      break;
     }
   }
+  process.exitCode = 1;
 })();

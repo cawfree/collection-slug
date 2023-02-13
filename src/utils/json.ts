@@ -1,3 +1,3 @@
-import fetch from 'node-fetch';
+import {wayback} from './wayback';
 
-export const json = (url: string) => fetch(url).then((e) => e.json());
+export const json = (url: string) => wayback(url).then((e) => e.json());

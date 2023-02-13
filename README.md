@@ -59,7 +59,7 @@ void (async () => {
 })();
 ```
 
-From my [__experimentation__](scripts/rate-limit.ts), the Wayback Machine has a very generous rate limit policy. I managed to retain a sustained ~150 slugs-per-minute without error.
+From my [__experimentation__](scripts/rate-limit.ts), the Wayback Machine has a very generous rate limit policy. I managed to retain a sustained ~112 slugs-per-minute without error.
 
 ### license ✌️
 [__CC0-1.0__](./LICENSE)

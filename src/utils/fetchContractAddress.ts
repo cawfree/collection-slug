@@ -1,4 +1,4 @@
-import {DEFAULT_REDUNDANCY, WAYBACK_MACHINE_BOTTLENECK} from '../constants';
+import {DEFAULT_REDUNDANCY} from '../constants';
 
 import { fetchSnapshotUrls } from './fetchSnapshotUrls';
 import { text } from './text';
@@ -18,7 +18,7 @@ export async function fetchContractAddress({
 
   for (const snapshotUrl of snapshotUrls) {
     try {
-      const html = await WAYBACK_MACHINE_BOTTLENECK.schedule(() => text(snapshotUrl));
+      const html = await text(snapshotUrl);
       const addresses = html.match(/(\b0x[a-f0-9]{40}\b)/g) || [];
       return winner(addresses);
     } catch {}

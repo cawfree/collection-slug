@@ -1,5 +1,3 @@
-import {WAYBACK_MACHINE_BOTTLENECK} from '../constants';
-
 import { json } from './json';
 
 const cdx = ({
@@ -24,8 +22,7 @@ export const fetchSnapshotUrls = async ({
 }): Promise<
   readonly string[]
 > => {
-
-  const data = await WAYBACK_MACHINE_BOTTLENECK.schedule(() => json(cdx({cdxUri, count: redundancy})));
+  const data = await json(cdx({cdxUri, count: redundancy}));
 
   if (!Array.isArray(data))
     throw new Error(`Expected data array, encountered "${String(data)}".`);
@@ -40,9 +37,7 @@ export const fetchSnapshotUrls = async ({
   // Avoid rate limiting; make requests sequentially.
   for (const maybeArchiveUrl of maybeArchiveUrls) {
 
-    const maybeAvailability = await WAYBACK_MACHINE_BOTTLENECK.schedule(
-      () => json(`https://archive.org/wayback/available?url=${maybeArchiveUrl}`),
-    );
+    const maybeAvailability = await json(`https://archive.org/wayback/available?url=${maybeArchiveUrl}`);
 
     if (!maybeAvailability || typeof maybeAvailability !== 'object')
       continue;
