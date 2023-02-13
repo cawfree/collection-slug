@@ -35,12 +35,12 @@ const requestRookies = async () => {
 void (async () => {
   while (true) {
     try {
-      const parallelRequests = BOTTLENECK_MAX_CONCURRENT;
+      const numberOfParallelRequests = BOTTLENECK_MAX_CONCURRENT;
 
       const results = await Promise.all(
         [
-          ...[...Array(parallelRequests)].map(requestRookies),
-          ...[...Array(parallelRequests)].map(requestSomethingWhichDoesNotExist),
+          ...[...Array(numberOfParallelRequests)].map(requestRookies),
+          ...[...Array(numberOfParallelRequests)].map(requestSomethingWhichDoesNotExist),
         ],
       );
 
@@ -49,7 +49,7 @@ void (async () => {
       console.log('rpm', rpm); // sustained ~110rpm
     } catch (e) {
       console.error(e);
-      break;
+      if (Math.random() < 0) break;
     }
   }
   process.exitCode = 1;

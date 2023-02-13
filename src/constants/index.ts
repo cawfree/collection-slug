@@ -16,11 +16,13 @@ export const OPENSTORE_DEPLOYMENTS: readonly Deployment[] = [
 ];
 
 export const DEFAULT_REDUNDANCY = 1;
-export const BOTTLENECK_MAX_CONCURRENT = 12;
+
+export const BOTTLENECK_MAX_CONCURRENT = 8;
+export const BOTTLENECK_MIN_TIME = 275;
 
 // 12, 300 ~ 96rpm.
 
 export const BOTTLENECK_WAYBACK_MACHINE = new Bottleneck({
   maxConcurrent: BOTTLENECK_MAX_CONCURRENT,
-  minTime: 300,
+  minTime: BOTTLENECK_MIN_TIME,
 });
