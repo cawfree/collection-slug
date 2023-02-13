@@ -19,4 +19,5 @@ export const DEFAULT_REDUNDANCY = 1;
 
 export const WAYBACK_MACHINE_BOTTLENECK = new Bottleneck({
   maxConcurrent: 8,
+  minTime: 150,
 });
