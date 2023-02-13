@@ -1,4 +1,5 @@
 export * from './fetchCollectionSlug';
+export * from './fetchWithExponentialBackoff';
 export * from './fetchContractAddress';
 export * from './fetchSnapshotUrls';
 

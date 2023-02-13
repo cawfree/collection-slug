@@ -1,4 +1,4 @@
-import {fetchCollectionSlug, BOTTLENECK_MAX_CONCURRENT} from '../src';
+import {fetchCollectionSlug} from '../src';
 
 const requestsPerMinute = (() => {
   let dt: Date[] = [];
@@ -36,7 +36,7 @@ const requestRookies = async () => {
 void (async () => {
   while (true) {
     try {
-      const numberOfParallelRequests = BOTTLENECK_MAX_CONCURRENT;
+      const numberOfParallelRequests = 100;
 
       const results = await Promise.all(
         [

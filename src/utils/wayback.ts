@@ -1,12 +1,11 @@
-import fetch from 'node-fetch';
+import type {Response} from 'node-fetch';
 
 import {BOTTLENECK_WAYBACK_MACHINE} from '../constants';
 
-export const wayback = async (url: string) => {
-  try {
-    return await BOTTLENECK_WAYBACK_MACHINE.schedule(() => fetch(url))
-  } catch (e) {
-    await BOTTLENECK_WAYBACK_MACHINE.schedule(() => Promise.resolve());
-    throw e;
-  }
+import {fetchWithExponentialBackoff} from './fetchWithExponentialBackoff';
+
+export const wayback = async (
+  url: string,
+): Promise<Response> => {
+  return BOTTLENECK_WAYBACK_MACHINE.schedule(() => fetchWithExponentialBackoff(url));
 };
