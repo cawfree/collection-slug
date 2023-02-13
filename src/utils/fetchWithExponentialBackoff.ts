@@ -1,5 +1,7 @@
 import fetch, {FetchError, Response} from 'node-fetch';
 
+import {BACKOFF_MULTIPLIER, INITIAL_BACKOFF_TIME} from '../constants';
+
 const retriableFetchErrors: readonly string[] = [
   'ENOTFOUND',
   'ECONNREFUSED',
@@ -25,11 +27,14 @@ const stateWithBackoff = (
   return {...extras, delay: Math.ceil(delay * backoffMultiplier)};
 };
 
-const fetchWithExponentialBackoffThunk = (() => {
+const fetchWithExponentialBackoffThunk = (({
+  initialBackoffTime,
+  backoffMultiplier,
+}: {
+  readonly initialBackoffTime: number;
+  readonly backoffMultiplier: number;
+}) => {
   const state: State = initialState();
-
-  const initialBackoffTime = 2500;
-  const backoffMultiplier = 2;
 
   const dispatch = (nextState: State): State => Object.assign(state, nextState);
 
@@ -80,4 +85,7 @@ const fetchWithExponentialBackoffThunk = (() => {
   }
 });
 
-export const fetchWithExponentialBackoff = fetchWithExponentialBackoffThunk();
+export const fetchWithExponentialBackoff = fetchWithExponentialBackoffThunk({
+  initialBackoffTime: INITIAL_BACKOFF_TIME,
+  backoffMultiplier: BACKOFF_MULTIPLIER,
+});

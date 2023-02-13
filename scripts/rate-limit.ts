@@ -11,20 +11,20 @@ const requestsPerMinute = (() => {
   };
 })();
 
-const requestSomethingWhichDoesNotExist = async () => {
-  const contractAddress = `${Math.random()}`;
-  try {
-    await fetchCollectionSlug({
-      contractAddress,
-    });
-  } catch (e) {
-    const isAcceptableError = e instanceof Error
-      && e.message === `Unable to find an attempted archive url for "opensea.io/assets/ethereum/${contractAddress}/*".`;
-
-    if (!isAcceptableError) throw e;
-  }
-  return requestsPerMinute();
-};
+//const requestSomethingWhichDoesNotExist = async () => {
+//  const contractAddress = `${Math.random()}`;
+//  try {
+//    await fetchCollectionSlug({
+//      contractAddress,
+//    });
+//  } catch (e) {
+//    const isAcceptableError = e instanceof Error
+//      && e.message === `Unable to find an attempted archive url for "opensea.io/assets/ethereum/${contractAddress}/*".`;
+//
+//    if (!isAcceptableError) throw e;
+//  }
+//  return requestsPerMinute();
+//};
 
 const requestRookies = async () => {
   await fetchCollectionSlug({
@@ -36,18 +36,24 @@ const requestRookies = async () => {
 void (async () => {
   while (true) {
     try {
-      const numberOfParallelRequests = 100;
+      // 0.78796s for a single slug = 393.98s.
+      const numberOfParallelRequests = 50;
+
+      const now = Date.now();
 
       const results = await Promise.all(
         [
           ...[...Array(numberOfParallelRequests)].map(requestRookies),
-          ...[...Array(numberOfParallelRequests)].map(requestSomethingWhichDoesNotExist),
+          //...[...Array(numberOfParallelRequests)].map(requestSomethingWhichDoesNotExist),
         ],
       );
 
       const rpm = results[results.length - 1];
 
-      console.log('rpm', rpm); // sustained ~110rpm
+      const dt = Date.now() - now;
+      const timePerRequest = (dt / numberOfParallelRequests) / 1000;
+
+      console.log('rpm', rpm, 'dt', dt, 'timePerRequest', timePerRequest);
     } catch (e) {
       console.error(e);
       if (Math.random() < 0) break;
