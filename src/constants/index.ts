@@ -21,10 +21,8 @@ export const INITIAL_BACKOFF_TIME = 5000;
 export const BACKOFF_MULTIPLIER = 1.25;
 
 export const BOTTLENECK_MAX_CONCURRENT = 4;
-//export const BOTTLENECK_MIN_TIME = 120;
 
 export const BOTTLENECK_WAYBACK_MACHINE = new Bottleneck({
   maxConcurrent: BOTTLENECK_MAX_CONCURRENT,
-  //minTime: BOTTLENECK_MIN_TIME,
 });
 

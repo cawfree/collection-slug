@@ -35,6 +35,7 @@ const requestRookies = async () => {
 
 void (async () => {
   let count = 0;
+  let totalTime = 0;
 
   while (true) {
     try {
@@ -46,14 +47,15 @@ void (async () => {
         [...Array(BOTTLENECK_MAX_CONCURRENT)].map(requestRookies),
       );
 
-      count += results.length;
-
       const rpm = results[results.length - 1];
 
       const dt = Date.now() - now;
       const timePerRequest = (dt / 1000) / results.length;
 
-      console.log('rpm', rpm, 'dt', dt, 'timePerRequest', timePerRequest, 'count', count);
+      count += results.length;
+      totalTime += dt;
+
+      console.log('rpm', rpm, 'dt', dt, 'timePerRequest', timePerRequest, 'count', count, 'total time', totalTime);
     } catch (e) {
       console.error(e);
       if (Math.random() < 0) break;
