@@ -1,5 +1,3 @@
-import { parse } from 'node-html-parser';
-
 import { Network } from '../@types';
 import {
   BASE_COLLECTION_URL,
@@ -50,11 +48,9 @@ export const fetchCollectionSlug = async ({
 
       if (!maybeSnapshotUrl) continue;
 
-      const $ = parse(await text(maybeSnapshotUrl));
-
-      const slugs = $.getElementsByTagName('a')
-        .map(e => e.attributes.href)
-        .flatMap(e => e?.length ? [e] : [])
+      const slugs = (
+        (await text(maybeSnapshotUrl)).match(/(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])/g) || []
+      )
         .filter(e => e.includes(BASE_COLLECTION_URL))
         .map(e => e.substring(e.indexOf(BASE_COLLECTION_URL) + BASE_COLLECTION_URL.length).split('/')[0]?.split('?')[0])
         .flatMap(e => typeof e === 'string' ? [e] : []);
