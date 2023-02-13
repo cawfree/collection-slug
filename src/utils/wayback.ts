@@ -6,6 +6,7 @@ export const wayback = async (url: string) => {
   try {
     return await BOTTLENECK_WAYBACK_MACHINE.schedule(() => fetch(url))
   } catch (e) {
+    await BOTTLENECK_WAYBACK_MACHINE.schedule(() => Promise.resolve());
     throw e;
   }
 };

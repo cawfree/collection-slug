@@ -18,7 +18,7 @@ export const OPENSTORE_DEPLOYMENTS: readonly Deployment[] = [
 export const DEFAULT_REDUNDANCY = 1;
 
 export const BOTTLENECK_MAX_CONCURRENT = 8;
-export const BOTTLENECK_MIN_TIME = 275;
+export const BOTTLENECK_MIN_TIME = 400;
 
 // 12, 300 ~ 96rpm.
 

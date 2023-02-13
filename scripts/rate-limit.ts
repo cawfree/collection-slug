@@ -12,13 +12,14 @@ const requestsPerMinute = (() => {
 })();
 
 const requestSomethingWhichDoesNotExist = async () => {
+  const contractAddress = `${Math.random()}`;
   try {
     await fetchCollectionSlug({
-      contractAddress: '0x00000000006c3852cbef3e08e8df289169ede582',
+      contractAddress,
     });
   } catch (e) {
     const isAcceptableError = e instanceof Error
-      && e.message === 'Unable to find an attempted archive url for "opensea.io/assets/ethereum/0x00000000006c3852cbef3e08e8df289169ede582/*".';
+      && e.message === `Unable to find an attempted archive url for "opensea.io/assets/ethereum/${contractAddress}/*".`;
 
     if (!isAcceptableError) throw e;
   }
