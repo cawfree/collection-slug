@@ -44,15 +44,19 @@ export const fetchCollectionSlug = async ({
 
       if (!maybeSnapshotUrl) continue;
 
+      const someText = await text(maybeSnapshotUrl);
+
       const slugs = (
-        (await text(maybeSnapshotUrl)).match(/(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])/g) || []
+        someText.match(/(https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])/g) || []
       )
         .filter(e => e.includes(BASE_COLLECTION_URL))
         .map(e => e.substring(e.indexOf(BASE_COLLECTION_URL) + BASE_COLLECTION_URL.length).split('/')[0]?.split('?')[0])
         .flatMap(e => typeof e === 'string' ? [e] : []);
 
       return winner(slugs);
-    } catch {}
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   throw new Error('Unable to determine closest snapshot url.');

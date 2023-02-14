@@ -1,4 +1,4 @@
-import {BOTTLENECK_MAX_CONCURRENT, fetchCollectionSlug} from '../src';
+import {fetchCollectionSlug} from '../src';
 
 const requestsPerMinute = (() => {
   let dt: Date[] = [];
@@ -44,7 +44,7 @@ void (async () => {
       const now = Date.now();
 
       const results = await Promise.all(
-        [...Array(BOTTLENECK_MAX_CONCURRENT)].map(requestRookies),
+        [...Array(100)].map(requestRookies),
       );
 
       const rpm = results[results.length - 1];
@@ -57,6 +57,7 @@ void (async () => {
 
       console.log('rpm', rpm, 'dt', dt, 'timePerRequest', timePerRequest, 'count', count, 'total time', totalTime);
     } catch (e) {
+      console.error('did err');
       console.error(e);
       if (Math.random() < 0) break;
     }

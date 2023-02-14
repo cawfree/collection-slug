@@ -1,3 +1,3 @@
 import {wayback} from './wayback';
 
-export const json = (url: string) => wayback(url).then((e) => e.json());
+export const json = (url: string) => wayback(url).then(JSON.parse);
