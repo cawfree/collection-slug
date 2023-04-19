@@ -38,6 +38,13 @@ describe('collection-slug', () => {
       }))
         .toEqual('layer3');
     });
+    it('fabweltnftm', async () => {
+      expect(await fetchCollectionSlug({
+        contractAddress: '0xa5d288d5f7bddd78f07d407357eefad246dd6de8',
+        network: Network.MATIC,
+      }))
+        .toEqual('fabweltnftm');
+    });
   });
 
   describe('arbitrum', () => {
